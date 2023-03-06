@@ -35,7 +35,7 @@ int main()
         /* It should wait at least 1/8 seconds for next read */
         //wait(MAX31875_WAIT_CONV_RATE_8);   
         /* But to slow print out rate, wait 1 second here */
-        wait(1);
+        ThisThread::sleep_for(1000ms);  // wait(1);
 
         f_temperature = temp_sensor.read_reg_as_temperature(MAX31875_REG_TEMPERATURE);
         printf("Temperature is %3.4f Celsius, %3.4f Fahrenheit\r\n",
