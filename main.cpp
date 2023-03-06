@@ -12,7 +12,16 @@
 #include "max31875_cpp.h"
 
 /* Declare the I2C of mikroBUS on board */
+#if defined(TARGET_NUMAKER_IOT_M487)
+I2C mikro_i2c(PG_3, PG_2); // PG_3: I2C1_SDA, PG_2: I2C1_SCL
+#elif defined (TARGET_NUMAKER_IOT_M467)
+/* MBUS0 PG_3: I2C1_SDA, PG_2: I2C1_SCL */
 I2C mikro_i2c(PG_3, PG_2);
+/* MBUS1 PG_9: I2C4_SCL, PG_10: I2C4_SDA */
+// I2C mikro_i2c(PG_9, PG_10);
+#else
+#error define mikro i2c port for your board.
+#endif
 
 /* Declare the MAX31875 sensor */
 MAX31875 temp_sensor(mikro_i2c, MAX31875_I2C_SLAVE_ADR_R0);
