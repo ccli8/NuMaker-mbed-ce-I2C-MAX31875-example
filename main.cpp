@@ -11,20 +11,20 @@
 #include "max31875.h"
 #include "max31875_cpp.h"
 
+using namespace mbed_nuvoton;
+
 /* Declare the I2C of mikroBUS on board */
 #if defined(TARGET_NUMAKER_IOT_M487)
-I2C mikro_i2c(PG_3, PG_2); // PG_3: I2C1_SDA, PG_2: I2C1_SCL
+/* PG_3: I2C1_SDA, PG_2: I2C1_SCL */
+MAX31875 temp_sensor(PG_3, PG_2, MAX31875_I2C_SLAVE_ADR_R0, 1000000);
 #elif defined (TARGET_NUMAKER_IOT_M467)
 /* MBUS0 PG_3: I2C1_SDA, PG_2: I2C1_SCL */
-I2C mikro_i2c(PG_3, PG_2);
+MAX31875 temp_sensor(PG_3, PG_2, MAX31875_I2C_SLAVE_ADR_R0, 1000000);
 /* MBUS1 PG_9: I2C4_SCL, PG_10: I2C4_SDA */
-// I2C mikro_i2c(PG_9, PG_10);
+// MAX31875 temp_sensor(PG_9, PG_10, MAX31875_I2C_SLAVE_ADR_R0, 1000000);
 #else
 #error define mikro i2c port for your board.
 #endif
-
-/* Declare the MAX31875 sensor */
-MAX31875 temp_sensor(mikro_i2c, MAX31875_I2C_SLAVE_ADR_R0);
 
 int main()
 {
@@ -32,9 +32,6 @@ int main()
 
     printf("\r\nmbed OS version is %d.\r\n", MBED_VERSION);
     printf("Start to read temperature ...\r\n");
-
-    /* Set frequency of I2C bus to 1MHz */
-    mikro_i2c.frequency(1000000);
     
     /* Configure temperature sensor for 8 times per second */
     temp_sensor.write_cfg(MAX31875_CFG_CONV_RATE_8 | MAX31875_CFG_RESOLUTION_12BIT);
